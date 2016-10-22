@@ -58,7 +58,7 @@ def logout():
     return render_template('login.html')
 
 @app.route('/listInvoices', methods = ['GET'])
-def list():
+def listAndPay():
 	if 'username' not in session.keys() or session['username'] == '':
 		return render_template('login.html')
 	else:
@@ -121,7 +121,7 @@ def invoice_home():
     	with open('invoices.json', 'w') as f:
         	json.dump(data, f)
 
-        return render_template("home.html", user=session['username'])
+        return redirect(url_for('listAndPay'))
 
 
 
