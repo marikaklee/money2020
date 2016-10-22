@@ -57,22 +57,54 @@ def logout():
     session['username'] = ''
     return render_template('login.html')
 
-@app.route('/invoice', methods=['GET'])
+
+
+@app.route('/invoice', methods=['GET', 'POST'])
 def invoice_home():
-    if 'username' not in session.keys() or session['username'] == '':
-        return render_template('login.html')
-    session['invoice'] = ''
-    company = ''
-    phone = ''
-    address = ''
-    with open('users.json') as data_file:    
-            data = json.load(data_file)
-            for user in data['users']:
-                if user['username'] == session['username']:
-                    company = user['company']
-                    phone = user['phone']
-                    address = user['address']
-    return render_template("invoice.html", user=session['username'], company=company, phone=phone, address=address)
+	if(request.method == 'GET'):
+	    if 'username' not in session.keys() or session['username'] == '':
+	        return render_template('login.html')
+	    session['invoice'] = ''
+	    company = ''
+	    phone = ''
+	    address = ''
+	    with open('users.json') as data_file:    
+	            data = json.load(data_file)
+	            for user in data['users']:
+	                if user['username'] == session['username']:
+	                    company = user['company']
+	                    phone = user['phone']
+	                    address = user['address']
+	    return render_template("invoice.html", user=session['username'], company=company, phone=phone, address=address)
+	else:
+
+		memo = request.form["memo"]
+		email = request.form["email"]
+		amount = request.form["amount"]
+		name = request.form["name"]
+		phone = request.form["phone"]
+		dueDate = request.form["due"]
+
+		invoice_json = { 
+		"Service": memo,
+		"Customer": name,
+		"Email": email,
+		"Phone": phone,
+		"Amount": amount,
+		"DueDate": dueDate,
+		"Status": "Unpaid"
+		}
+
+		with open('invoices.json') as data_file:    
+			data = json.load(data_file)
+
+        data['invoices'].append(invoice_json)
+
+    	with open('invoices.json', 'w') as f:
+        	json.dump(data, f)
+
+        return render_template("home.html", user=session['username'])
+
 
 
 @app.route('/hello')
