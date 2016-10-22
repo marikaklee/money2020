@@ -57,7 +57,25 @@ def logout():
     session['username'] = ''
     return render_template('login.html')
 
-
+@app.route('/listInvoices', methods = ['GET'])
+def list():
+	if 'username' not in session.keys() or session['username'] == '':
+		return render_template('login.html')
+	else:
+		invoices = []
+	
+		with open('invoices.json') as data_file:    
+			data = json.load(data_file)
+		for invoice in data['invoices']:
+			invoices.append({ 
+        		"DueDate": invoice['DueDate'], 
+        		"Vendor": invoice['Vendor'],
+        		"Status": invoice['Status'],
+        		"Amount": invoice['Amount'],
+        		"Service": invoice['Service']
+        		})
+		print invoices
+		return render_template('showAndPayInvoices.html', invoices=invoices)
 
 @app.route('/invoice', methods=['GET', 'POST'])
 def invoice_home():
@@ -87,7 +105,7 @@ def invoice_home():
 
 		invoice_json = { 
 		"Service": memo,
-		"Customer": name,
+		"Vendor": name,
 		"Email": email,
 		"Phone": phone,
 		"Amount": amount,

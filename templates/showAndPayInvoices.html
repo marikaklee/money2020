@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Checkbook</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <!-- Bootstrap 3.3.6 -->
+      <script src="bootstrap/js/bootstrap.min.js"></script>
+   </head>
+   <body>
+      <div class="container">
+      <nav class="navbar navbar-default">
+         <div class="container-fluid">
+            <div class="navbar-header">
+               <a class="navbar-brand" href="/" ></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+              	<li><a href="/invoice">Add an Invoice</a></li>
+              	<li><a href="/listInvoices">View and Pay Invoices</a></li>
+               	<li><a href="/logout">Logout</a></li>
+               	{% if user %}
+               	<li style="margin-left:450px; margin-top:15px;">Hello, {{user}}! </li>
+               	{% endif %}
+            </ul>
+         </div>
+      </nav>
+      <h1>Invoices</h1><br><br>
+      <div class="box box-info"><br><br>
+      <!-- /.box-header -->
+      <div class="box-body">
+         <div class="table-responsive">
+            <table class="table no-margin">
+               <thead>
+                  <tr>
+                    <th>Due Date</th>
+                    <th>Vendor</th>
+                    <th>Status</th>
+                    <th>Amount (USD)</th>
+                    <th>Service </th>
+                    <th>  </th>
+                  </tr>
+            </thead>
+            <tbody>
+            {% for invoice in invoices %}
+               <tr>
+                 <td>{{ invoice.DueDate }}</td>
+                 <td>{{ invoice.Vendor }}</td>
+                 {% if invoice.Status == 'Paid' %}
+                 <td><span class="label label-success">{{invoice.Status}}</span></td>
+                 {% else %}
+                 <td><span class="label label-danger">{{invoice.Status}}</span></td>
+                 {%endif %}
+                 <td>
+                    <div class="sparkbar" data-color="#00a65a" data-height="20">${{invoice.Amount}}</div>
+                 </td>
+                 <td>{{invoice.Service}}</td>
+                 {% if invoice.Status != 'Paid' %}
+                 <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#payInvoice">Pay</button></td>
+                 {% endif %}
+              </tr>
+            {%endfor%}
+            </tbody>
+         </table>
+         <div id="payInvoice" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Pay Invoice</h4>
+              </div>
+              <div class="modal-body">
+                <p>Some text in the modal.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </div>
+    </body>
+</html>
