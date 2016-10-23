@@ -23,6 +23,7 @@ def charge():
 
 @app.route("/", methods=['GET'])
 def home():
+	session['message'] = ''
     # If you're not logged in, go back to login page
     if 'username' not in session.keys() or session['username'] == '':
         return render_template('login.html')
@@ -108,6 +109,7 @@ def payInvoice():
 
 @app.route('/invoice', methods=['GET', 'POST'])
 def invoice_home():
+	session['message'] = ''
 	if(request.method == 'GET'):
 	    if 'username' not in session.keys() or session['username'] == '':
 	        return render_template('login.html')
