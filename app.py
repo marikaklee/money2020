@@ -19,8 +19,8 @@ app.secret_key = 'iF9SW2S6hFgCNpFXDpcoe17HaDWt5N'
 
 @app.route("/check")
 def check():
-	if session.get("amount") == None:
-		return redirect(url_for('home'))
+	"""if session.get("amount") == None:
+		return redirect(url_for('home'))"""
 
 	amount=session.get("amount")
 	vendor=session.get("vendor")
@@ -35,13 +35,16 @@ def check():
 
 	with open('invoices.json') as data_file:    
 		data = json.load(data_file)
+		print session.get("id")
 
 		for invoice in data['invoices']:
-			if invoice['Id'] == session.get("id"):
-				invoice['Status'] = 'Paid'
+			print invoice[u'Id']
+			if invoice[u'Id'] == session.get("id"):
+				invoice[u'Status'] = 'Paid'
+				print invoice[u'Status']
 
-    	with open('invoices.json', 'w') as f:
-        	json.dump(data, f)
+	with open('invoices.json', 'w') as f:
+		json.dump(data, f)
 
 	return render_template('check.html', amount=amount, vendor=vendor, email=email, firstName=firstName,lastName=lastName)
 
@@ -113,7 +116,7 @@ def payInvoice():
     expiryYear = request.form["expiryYear"]
     cvv = request.form["cvv"]
     amount = float(request.form["amount"])
-    paymentId = request.form["id"]
+    paymentId = int(request.form["id"])
 
     with open('users.json') as data_file:    
 	    data = json.load(data_file)
@@ -151,7 +154,7 @@ def payInvoice():
 	            for user in data['users']:
 	                if user['username'] == session['username']:
 	                	user['strikes'] = user['strikes'] + 1
-			with open('invoices.json', 'w') as f:
+			with open('users.json', 'w') as f:
 				json.dump(data, f)
 
             return redirect(url_for('listAndPay'))
