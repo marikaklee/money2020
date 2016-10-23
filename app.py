@@ -4,6 +4,10 @@ import base64
 import hashlib
 import hmac
 from config import public_key, private_key
+import httplib, urllib
+import hashlib
+import requests
+
 
 app = Flask(__name__)
 
@@ -76,6 +80,31 @@ def listAndPay():
         		})
 		print invoices
 		return render_template('showAndPayInvoices.html', invoices=invoices)
+
+@app.route('/payInvoice', methods=['POST'])
+def payInvoice():
+	print "inside pay invoice"
+	routingNumber = request.form["routingNumber"]
+	accountNumber = request.form["accountNumber"]
+	name = request.form["Name"]
+	cardNumber = request.form["cardNumber"]
+	expiryMonth = request.form["expiryMonth"]
+	expiryYear = request.form["expiryYear"]
+	cvv = request.form["cvv"]
+	amount = request.form["amount"]
+
+	hash_object = hashlib.sha512(cardNumber)
+	hex_dig = hash_object.hexdigest()
+
+	url = "https://sandbox.feedzai.com/v1/payments"
+	data = {"user_id": name, "amount": 28000, "currency": "USD", "payment_method": "card", "user_fullname": name,
+	"card_fullname": name, "card_hash": hex_dig, "card_exp": expiryMonth + "/" + expiryYear,  }
+	headers = {'Authorization': 'UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', 'Accept-Encoding': 'UTF-8', 'Content-Type': 'application/json', 'Accept': '*/*'}
+
+	response = requests.post(url, data=data, headers=headers)
+	print response
+
+	return render_template("home.html")
 
 @app.route('/invoice', methods=['GET', 'POST'])
 def invoice_home():
