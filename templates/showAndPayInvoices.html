@@ -30,6 +30,11 @@
          </div>
       </nav>
       <h1>Invoices</h1><br><br>
+      {% if message != "" %}
+      <div class="alert alert-danger">
+        <strong>Error:</strong> {{message}}
+      </div>
+      {% endif %}
       <div class="box box-info"><br><br>
       <!-- /.box-header -->
       <div class="box-body">

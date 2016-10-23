@@ -7,6 +7,7 @@ from config import public_key, private_key
 import httplib, urllib
 import hashlib
 import requests
+from requests.auth import HTTPBasicAuth
 
 
 app = Flask(__name__)
@@ -56,7 +57,7 @@ def listAndPay():
 		return render_template('login.html')
 	else:
 		invoices = []
-	
+
 		with open('invoices.json') as data_file:    
 			data = json.load(data_file)
 		for invoice in data['invoices']:
@@ -67,8 +68,12 @@ def listAndPay():
         		"Amount": invoice['Amount'],
         		"Service": invoice['Service']
         		})
-		print invoices
-		return render_template('showAndPayInvoices.html', invoices=invoices)
+		if(session['message'] != ''):
+			message = session['message']
+			session['message'] = ''
+			return render_template('showAndPayInvoices.html', invoices=invoices, message=message)
+		else:
+			return render_template('showAndPayInvoices.html', invoices=invoices, message="")
 
 @app.route('/payInvoice', methods=['POST'])
 def payInvoice():
@@ -86,14 +91,20 @@ def payInvoice():
 	hex_dig = hash_object.hexdigest()
 
 	url = "https://sandbox.feedzai.com/v1/payments"
-	data = {"user_id": name, "amount": 28000, "currency": "USD", "payment_method": "card", "user_fullname": name,
-	"card_fullname": name, "card_hash": hex_dig, "card_exp": expiryMonth + "/" + expiryYear,  }
+	data = {"user_id": name, "amount": 28000, "currency": "USD", "payment_method": "card", "user_fullname": name,"card_fullname": name, "card_hash": hex_dig, "card_exp": expiryMonth + "/" + expiryYear}
 	headers = {'Authorization': 'UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', 'Accept-Encoding': 'UTF-8', 'Content-Type': 'application/json', 'Accept': '*/*'}
 
-	response = requests.post(url, data=data, headers=headers)
-	print response
+	response = requests.post(url, data=json.dumps(data), headers=headers, auth=HTTPBasicAuth('UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', ''))
+	
+	jsonResponse = response.json()
+	print jsonResponse[u'explanation']
 
-	return render_template("home.html")
+	if jsonResponse[u'explanation'][u'likelyFraud'] is True:
+		session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
+		return redirect(url_for('listAndPay'))
+	else:
+		return redirect(url_for('home'))
+	
 
 @app.route('/invoice', methods=['GET', 'POST'])
 def invoice_home():
