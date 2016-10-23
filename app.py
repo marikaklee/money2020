@@ -19,13 +19,31 @@ app.secret_key = 'iF9SW2S6hFgCNpFXDpcoe17HaDWt5N'
 
 @app.route("/check")
 def check():
-    amount=session.get("amount")
-    vendor=session.get("vendor")
-    email="marikalee15@gmail.com"
-    firstName="Marika"
-    lastName="Lee"
+	if session.get("amount") == None:
+		return redirect(url_for('home'))
 
-    return render_template('check.html', amount=amount, vendor=vendor, email=email, firstName=firstName,lastName=lastName)
+	amount=session.get("amount")
+	vendor=session.get("vendor")
+	email=session.get("email")
+	firstName=session.get("name")
+	lastName=""
+
+	session['amount']=None
+	session['vendor']=None
+	session['email']=None
+	session['name']=None
+
+	with open('invoices.json') as data_file:    
+		data = json.load(data_file)
+
+		for invoice in data['invoices']:
+			if invoice['Id'] == session.get("id"):
+				invoice['Status'] = 'Paid'
+
+    	with open('invoices.json', 'w') as f:
+        	json.dump(data, f)
+
+	return render_template('check.html', amount=amount, vendor=vendor, email=email, firstName=firstName,lastName=lastName)
 
 @app.route("/", methods=['GET'])
 def home():
@@ -70,9 +88,11 @@ def listAndPay():
 			invoices.append({ 
         		"DueDate": invoice['DueDate'], 
         		"Vendor": invoice['Vendor'],
+        		"Email": invoice['Email'],
         		"Status": invoice['Status'],
         		"Amount": invoice['Amount'],
-        		"Service": invoice['Service']
+        		"Service": invoice['Service'],
+        		"Id": invoice["Id"]
         		})
 		if(session.get('message') != ''):
 			message = session['message']
@@ -84,6 +104,7 @@ def listAndPay():
 @app.route('/payInvoice', methods=['POST'])
 def payInvoice():
     vendor = request.form["vendor"]
+    email = request.form['email']
     routingNumber = request.form["routingNumber"]
     accountNumber = request.form["accountNumber"]
     name = request.form["Name"]
@@ -92,6 +113,7 @@ def payInvoice():
     expiryYear = request.form["expiryYear"]
     cvv = request.form["cvv"]
     amount = float(request.form["amount"])
+    paymentId = request.form["id"]
 
     if(cardNumber and expiryMonth and expiryYear and cvv and amount and routingNumber and accountNumber):
 
@@ -106,15 +128,16 @@ def payInvoice():
         
         jsonResponse = response.json()
 
-        session["vendor"]=vendor
-        session["amount"]=amount
-
         if jsonResponse[u'explanation'][u'likelyFraud'] is not False:
             session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
             return redirect(url_for('listAndPay'))
         else:
-          
-            return redirect(url_for('check'))
+          	session["vendor"]=vendor
+        	session["amount"]=amount
+        	session["email"]=email
+        	session["name"]=name
+        	session["id"]=paymentId
+        	return redirect(url_for('check'))
     else:
         session['message'] = "This transaction cannot be completed because some form fields are missing."
         return redirect(url_for('listAndPay'))
@@ -148,6 +171,7 @@ def invoice_home():
 		dueDate = request.form["due"]
 
 		invoice_json = { 
+		"Id":1,
 		"Service": memo,
 		"Vendor": name,
 		"Email": email,
@@ -159,6 +183,8 @@ def invoice_home():
 
 		with open('invoices.json') as data_file:    
 			data = json.load(data_file)
+
+		invoice_json["Id"] = len(data['invoices']) + 1
 
         data['invoices'].append(invoice_json)
 

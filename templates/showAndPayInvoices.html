@@ -44,10 +44,11 @@
                   <tr>
                     <th>Due Date</th>
                     <th>Vendor</th>
+                    <th>Email</th>
                     <th>Status</th>
                     <th>Amount (USD)</th>
                     <th>Service </th>
-                    <th>  </th>
+                    <th></th>
                   </tr>
             </thead>
             <tbody>
@@ -55,6 +56,7 @@
                <tr>
                  <td>{{ invoice.DueDate }}</td>
                  <td>{{ invoice.Vendor }}</td>
+                 <td>{{ invoice.Email }}</td>
                  {% if invoice.Status == 'Paid' %}
                  <td><span class="label label-success">{{invoice.Status}}</span></td>
                  {% else %}
@@ -65,7 +67,7 @@
                  </td>
                  <td>{{invoice.Service}}</td>
                  {% if invoice.Status != 'Paid' %}
-                 <td><button type="button" data-toggle="modal" data-target="#payInvoice" class="btn btn-success" onClick="SetModalValues('{{invoice.DueDate}}', '{{invoice.Vendor}}', '{{invoice.Status}}', {{invoice.Amount}}, '{{invoice.Service}}')" >Pay</button></td>
+                 <td><button type="button" data-toggle="modal" data-target="#payInvoice" class="btn btn-success" onClick="SetModalValues('{{invoice.DueDate}}', '{{invoice.Vendor}}', '{{invoice.Email}}', '{{invoice.Status}}', {{invoice.Amount}}, '{{invoice.Service}}', '{{invoice.Id}}')" >Pay</button></td>
                  {% endif %}
               </tr>
             {%endfor%}
@@ -181,6 +183,8 @@
                     </div>
                     <input id="paymentAmount" type="hidden" name="amount" value="">
                     <input id="vendorCompany" type="hidden" name="vendor" value="">
+                    <input id="email" type="hidden" name="email" value="">
+                    <input id="paymentId" type="hidden" name="id" value="">
                     <div class="form-group">
                       <div class="col-sm-offset-3 col-sm-9">
                         <button type="submit" class="btn btn-success">Pay Now</button>                  
@@ -201,14 +205,16 @@
     </form>
     
       <script type="text/javascript">
-      function SetModalValues(dueDate, vendor, status, amount, service){
+      function SetModalValues(dueDate, vendor, email, status, amount, service, id){
         document.getElementById("dueDate").innerText = "Due Date: " + dueDate;
         document.getElementById("vendor").innerText = "Vendor: " + vendor;
+        document.getElementById("email").value = email;
         document.getElementById("amount").innerText = "Amount: $" + amount;
         document.getElementById("service").innerText = "Service: " + service;
         document.getElementById("vendorCompany").value = vendor;
         document.getElementById("paymentStatement").innerText = "You're paying " + "$" + amount + " for " + service + " to " + vendor + " using a digital check.";
         document.getElementById("paymentAmount").value = amount;
+        document.getElementById("paymentId").value = id;
       }
       </script>
     </body>
