@@ -93,7 +93,7 @@ def payInvoice():
 		hex_dig = hash_object.hexdigest()
 
 		url = "https://sandbox.feedzai.com/v1/payments"
-		data = {"user_id": name, "amount": 28000, "currency": "USD", "payment_method": "card", "user_fullname": name,"card_fullname": name, "card_hash": hex_dig, "card_exp": expiryMonth + "/" + expiryYear}
+		data = {"user_id": name, "amount": amount, "currency": "USD", "payment_method": "card", "user_fullname": name,"card_fullname": name, "card_hash": hex_dig, "card_exp": expiryMonth + "/" + expiryYear}
 		headers = {'Authorization': 'UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', 'Accept-Encoding': 'UTF-8', 'Content-Type': 'application/json', 'Accept': '*/*'}
 
 		response = requests.post(url, data=json.dumps(data), headers=headers, auth=HTTPBasicAuth('UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', ''))
