@@ -31,6 +31,7 @@ def authorization_header(endpoint, verb, content_type, timestamp, public_key, pr
     sig = base64.b64encode(dig).decode()
     return '%s:%s' % (public_key, sig)
 
+
 @app.route("/check")
 def check():
 	"""if session.get("amount") == None:
