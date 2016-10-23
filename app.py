@@ -73,11 +73,13 @@ def home():
 		savings = []
 		averageSavings = 0
 		averageSpent = 0
+		services = []
 		with open('invoices.json') as data_file:    
 			data = json.load(data_file)
 		for invoice in data['invoices']:
 			invoices.append(float(invoice['Amount']))
 			savings.append(0.029 * float(invoice['Amount']))
+			services.append(invoice['Service'].encode('ascii','ignore'))
 			averageSpent = averageSpent + float(invoice['Amount'])
 			averageSavings = averageSavings + (0.029 * float(invoice['Amount']))
 		averageSpent = averageSpent / len(data['invoices'])
@@ -94,7 +96,7 @@ def home():
 					status="blacklisted"
 		print status
 
-		return render_template('home.html', user=session['username'], invoices=json.dumps(invoices), savings=json.dumps(savings), averageSavings=averageSavings, averageSpent=averageSpent, status=status)
+		return render_template('home.html', user=session['username'], invoices=json.dumps(invoices), savings=json.dumps(savings), averageSavings=averageSavings, averageSpent=averageSpent, status=status, services=(services))
 
 # Login page
 @app.route("/login", methods=['GET','POST'])

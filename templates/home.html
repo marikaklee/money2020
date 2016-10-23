@@ -37,10 +37,9 @@
         <strong>Error:</strong> You've been blacklisted by our fraud detection agency. Please contact the admin to be considered for removal from this list.
       </div>
       {% endif %}
-      <h2 style="margin-left:200px;"> You've saved an average of {{averageSavings}} so far, congrats!</h2>
+      <h2 style="margin-left:200px;"> You've saved an average of ${{averageSavings}} so far, congrats!</h2>
       <br>
-      <h2 style="margin-left:200px;"> You've spent an average of {{averageSpent}} so far. </h2>
-
+      <h2 style="margin-left:200px;"> You've spent an average of ${{averageSpent}} so far. </h2>
       <div id="chartDiv" style="margin-left:150px; margin-top:50px;"></div>
       <script>
         var chartData = {
@@ -50,8 +49,8 @@
           },
           legend: {}, // Creates an interactive legend
           series: [  // Insert your series data here.
-              { values: {{savings}}},
-              { values: {{invoices}}}
+              { values: {{savings}}, text:"Savings"},
+              { values: {{invoices}}, text:"Payments"}
 
           ]
         };
