@@ -1,0 +1,7 @@
+[2016-10-22 19:57:35 -0700] [43071] [INFO] Starting gunicorn 19.6.0
+[2016-10-22 19:57:35 -0700] [43071] [INFO] Listening at: http://0.0.0.0:5000 (43071)
+[2016-10-22 19:57:35 -0700] [43071] [INFO] Using worker: sync
+[2016-10-22 19:57:35 -0700] [43074] [INFO] Booting worker with pid: 43074
+[2016-10-22 19:57:50 -0700] [43071] [INFO] Handling signal: int
+[2016-10-22 19:57:50 -0700] [43074] [INFO] Worker exiting (pid: 43074)
+[2016-10-22 19:57:50 -0700] [43071] [INFO] Shutting down: Master
