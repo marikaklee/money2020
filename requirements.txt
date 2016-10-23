@@ -29,7 +29,6 @@ requests-oauthlib==0.6.1
 simplifycommerce-sdk-python==1.6.0
 six==1.10.0
 tarantool==0.5.4
-tweepy==3.6.0
 uuid==1.30
 vboxapi==1.0
 virtualenv==15.0.1
