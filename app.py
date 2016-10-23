@@ -18,7 +18,7 @@ app.secret_key = 'iF9SW2S6hFgCNpFXDpcoe17HaDWt5N'
 
 
 @app.route("/check")
-def charge():
+def check():
     return render_template('check.html')
 
 @app.route("/", methods=['GET'])
@@ -104,7 +104,7 @@ def payInvoice():
 			session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
 			return redirect(url_for('listAndPay'))
 		else :
-			return redirect(url_for('home'))
+			return redirect(url_for('check'))
 	else:
 		session['message'] = "This transaction cannot be completed because some form fields are missing."
 		return redirect(url_for('listAndPay'))
