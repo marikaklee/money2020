@@ -23,7 +23,6 @@ def charge():
 
 @app.route("/", methods=['GET'])
 def home():
-	session['message'] = ''
     # If you're not logged in, go back to login page
     if 'username' not in session.keys() or session['username'] == '':
         return render_template('login.html')
@@ -69,7 +68,7 @@ def listAndPay():
         		"Amount": invoice['Amount'],
         		"Service": invoice['Service']
         		})
-		if(session['message'] != ''):
+		if(session.get('message') != ''):
 			message = session['message']
 			session['message'] = ''
 			return render_template('showAndPayInvoices.html', invoices=invoices, message=message)
