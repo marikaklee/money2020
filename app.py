@@ -99,7 +99,10 @@ def payInvoice():
 		response = requests.post(url, data=json.dumps(data), headers=headers, auth=HTTPBasicAuth('UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', ''))
 		
 		jsonResponse = response.json()
-		print jsonResponse[u'explanation']
+		
+		if u'explanaion' not in jsonResponse.keys():
+			session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
+			return redirect(url_for('listAndPay'))
 
 		if jsonResponse[u'explanation'][u'likelyFraud'] is True:
 			session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
