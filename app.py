@@ -19,7 +19,13 @@ app.secret_key = 'iF9SW2S6hFgCNpFXDpcoe17HaDWt5N'
 
 @app.route("/check")
 def check():
-    return render_template('check.html')
+    amount=session.get("amount")
+    vendor=session.get("vendor")
+    email="marikalee15@gmail.com"
+    firstName="Marika"
+    lastName="Lee"
+
+    return render_template('check.html', amount=amount, vendor=vendor, email=email, firstName=firstName,lastName=lastName)
 
 @app.route("/", methods=['GET'])
 def home():
@@ -77,37 +83,41 @@ def listAndPay():
 
 @app.route('/payInvoice', methods=['POST'])
 def payInvoice():
+    vendor = request.form["vendor"]
+    routingNumber = request.form["routingNumber"]
+    accountNumber = request.form["accountNumber"]
+    name = request.form["Name"]
+    cardNumber = request.form["cardNumber"]
+    expiryMonth = request.form["expiryMonth"]
+    expiryYear = request.form["expiryYear"]
+    cvv = request.form["cvv"]
+    amount = float(request.form["amount"])
 
-	routingNumber = request.form["routingNumber"]
-	accountNumber = request.form["accountNumber"]
-	name = request.form["Name"]
-	cardNumber = request.form["cardNumber"]
-	expiryMonth = request.form["expiryMonth"]
-	expiryYear = request.form["expiryYear"]
-	cvv = request.form["cvv"]
-	amount = float(request.form["amount"])
+    if(cardNumber and expiryMonth and expiryYear and cvv and amount and routingNumber and accountNumber):
 
-	if(cardNumber and expiryMonth and expiryYear and cvv and amount and routingNumber and accountNumber):
+        hash_object = hashlib.sha512(cardNumber)
+        hex_dig = hash_object.hexdigest()
 
-		hash_object = hashlib.sha512(cardNumber)
-		hex_dig = hash_object.hexdigest()
+        url = "https://sandbox.feedzai.com/v1/payments"
+        data = {"user_id": name, "amount": amount, "currency": "USD", "payment_method": "card", "user_fullname": name,"card_fullname": name, "card_hash": hex_dig, "card_exp": expiryMonth + "/" + expiryYear, "billing_country": "US", "shipping_country": "US"}
+        headers = {'Authorization': 'UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', 'Accept-Encoding': 'UTF-8', 'Content-Type': 'application/json', 'Accept': '*/*'}
 
-		url = "https://sandbox.feedzai.com/v1/payments"
-		data = {"user_id": name, "amount": amount, "currency": "USD", "payment_method": "card", "user_fullname": name,"card_fullname": name, "card_hash": hex_dig, "card_exp": expiryMonth + "/" + expiryYear, "billing_country": "US", "shipping_country": "US"}
-		headers = {'Authorization': 'UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', 'Accept-Encoding': 'UTF-8', 'Content-Type': 'application/json', 'Accept': '*/*'}
+        response = requests.post(url, data=json.dumps(data), headers=headers, auth=HTTPBasicAuth('UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', ''))
+        
+        jsonResponse = response.json()
 
-		response = requests.post(url, data=json.dumps(data), headers=headers, auth=HTTPBasicAuth('UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', ''))
-		
-		jsonResponse = response.json()
+        session["vendor"]=vendor
+        session["amount"]=amount
 
-		if jsonResponse[u'explanation'][u'likelyFraud'] is not False:
-			session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
-			return redirect(url_for('listAndPay'))
-		else :
-			return redirect(url_for('check'))
-	else:
-		session['message'] = "This transaction cannot be completed because some form fields are missing."
-		return redirect(url_for('listAndPay'))
+        if jsonResponse[u'explanation'][u'likelyFraud'] is not False:
+            session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
+            return redirect(url_for('listAndPay'))
+        else:
+          
+            return redirect(url_for('check'))
+    else:
+        session['message'] = "This transaction cannot be completed because some form fields are missing."
+        return redirect(url_for('listAndPay'))
 
 
 @app.route('/invoice', methods=['GET', 'POST'])

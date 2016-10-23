@@ -4,9 +4,9 @@
       <title>Checkbook</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <!-- Bootstrap 3.3.6 -->
       <script src="bootstrap/js/bootstrap.min.js"></script>
    </head>
@@ -180,6 +180,7 @@
                       </div>
                     </div>
                     <input id="paymentAmount" type="hidden" name="amount" value="">
+                    <input id="vendorCompany" type="hidden" name="vendor" value="">
                     <div class="form-group">
                       <div class="col-sm-offset-3 col-sm-9">
                         <button type="submit" class="btn btn-success">Pay Now</button>                  
@@ -197,22 +198,6 @@
 
       </div>
       </div>
-
-              <form id="checkbook_io" method="POST">
-              <input type="hidden" id="checkbook_var"
-                data-key="9b6982b196c64dc791bb1c64426f60e1"
-                data-amount='50'
-                data-name="Cats Inc."
-                data-for="Cats Inc."
-                data-description="Purchased 20 cats."
-                data-user-email ='marikalee15@gmail.com'
-                data-redirect-url ="https://example.com/callback"
-                data-businessName ='Maudreka Inc.'
-                data-firstName ='Audrey'
-                data-lastName ='Cole'
-                data-env = 'sandbox'/>
-              <script src="https://sandbox.checkbook.io/static/api/v1/checkbook.js" class="checkbook-button" id="checkbook_api_js">
-              </script>
     </form>
     
       <script type="text/javascript">
@@ -221,6 +206,7 @@
         document.getElementById("vendor").innerText = "Vendor: " + vendor;
         document.getElementById("amount").innerText = "Amount: $" + amount;
         document.getElementById("service").innerText = "Service: " + service;
+        document.getElementById("vendorCompany").value = vendor;
         document.getElementById("paymentStatement").innerText = "You're paying " + "$" + amount + " for " + service + " to " + vendor + " using a digital check.";
         document.getElementById("paymentAmount").value = amount;
       }
