@@ -68,7 +68,32 @@ def home():
     if 'username' not in session.keys() or session['username'] == '':
         return render_template('login.html')
     else: # If you are logged in 
-    	return render_template('home.html', user=session['username'])
+		invoices = []
+		savings = []
+		averageSavings = 0
+		averageSpent = 0
+		with open('invoices.json') as data_file:    
+			data = json.load(data_file)
+		for invoice in data['invoices']:
+			invoices.append(float(invoice['Amount']))
+			savings.append(0.029 * float(invoice['Amount']))
+			averageSpent = averageSpent + float(invoice['Amount'])
+			averageSavings = averageSavings + (0.029 * float(invoice['Amount']))
+		averageSpent = averageSpent / len(data['invoices'])
+		averageSavings = averageSavings / len(data['invoices'])
+		print averageSpent
+		print averageSavings
+
+		status = ""
+		with open('users.json') as data_file:    
+			data = json.load(data_file)
+		for user in data['users']:
+			if user['username'] == session['username']:
+				if user['strikes'] > 3:
+					status="blacklisted"
+		print status
+
+		return render_template('home.html', user=session['username'], invoices=json.dumps(invoices), savings=json.dumps(savings), averageSavings=averageSavings, averageSpent=averageSpent, status=status)
 
 # Login page
 @app.route("/login", methods=['GET','POST'])
@@ -82,8 +107,8 @@ def login():
         for user in data['users']:
             if user['username'] == username and user['password'] == password:
                 session['username'] = username
-                return render_template('home.html', user=session['username'])
-        return render_template('login.html')  
+                return redirect(url_for("home"))
+        return redirect(url_for("home"))  
     else:
         return render_template('login.html')
 
