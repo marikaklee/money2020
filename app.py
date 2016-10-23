@@ -32,7 +32,7 @@ def authorization_header(endpoint, verb, content_type, timestamp, public_key, pr
     return '%s:%s' % (public_key, sig)
 
 
-@app.route("/check")
+@app.route("/check", methods=['POST', 'GET'])
 def check():
 	"""if session.get("amount") == None:
 		return redirect(url_for('home'))"""
