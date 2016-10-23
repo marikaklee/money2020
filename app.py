@@ -43,8 +43,6 @@ def check():
 	firstName=session.get("name")
 	lastName=""
 
-	if(amount == "" or amount == None):
-		return redirect(url_for("home"))
 
 	session['amount']=''
 	session['vendor']=''
