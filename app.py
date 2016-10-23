@@ -6,7 +6,6 @@ import hmac
 from config import public_key, private_key
 import httplib, urllib
 import hashlib
-import requests
 from requests.auth import HTTPBasicAuth
 
 
