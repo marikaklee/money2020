@@ -77,7 +77,7 @@ def listAndPay():
 
 @app.route('/payInvoice', methods=['POST'])
 def payInvoice():
-	print "inside pay invoice"
+
 	routingNumber = request.form["routingNumber"]
 	accountNumber = request.form["accountNumber"]
 	name = request.form["Name"]
@@ -87,24 +87,29 @@ def payInvoice():
 	cvv = request.form["cvv"]
 	amount = request.form["amount"]
 
-	hash_object = hashlib.sha512(cardNumber)
-	hex_dig = hash_object.hexdigest()
+	if(cardNumber and expiryMonth and expiryYear and cvv and amount and routingNumber and accountNumber):
 
-	url = "https://sandbox.feedzai.com/v1/payments"
-	data = {"user_id": name, "amount": 28000, "currency": "USD", "payment_method": "card", "user_fullname": name,"card_fullname": name, "card_hash": hex_dig, "card_exp": expiryMonth + "/" + expiryYear}
-	headers = {'Authorization': 'UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', 'Accept-Encoding': 'UTF-8', 'Content-Type': 'application/json', 'Accept': '*/*'}
+		hash_object = hashlib.sha512(cardNumber)
+		hex_dig = hash_object.hexdigest()
 
-	response = requests.post(url, data=json.dumps(data), headers=headers, auth=HTTPBasicAuth('UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', ''))
-	
-	jsonResponse = response.json()
-	print jsonResponse[u'explanation']
+		url = "https://sandbox.feedzai.com/v1/payments"
+		data = {"user_id": name, "amount": 28000, "currency": "USD", "payment_method": "card", "user_fullname": name,"card_fullname": name, "card_hash": hex_dig, "card_exp": expiryMonth + "/" + expiryYear}
+		headers = {'Authorization': 'UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', 'Accept-Encoding': 'UTF-8', 'Content-Type': 'application/json', 'Accept': '*/*'}
 
-	if jsonResponse[u'explanation'][u'likelyFraud'] is True:
-		session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
-		return redirect(url_for('listAndPay'))
+		response = requests.post(url, data=json.dumps(data), headers=headers, auth=HTTPBasicAuth('UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', ''))
+		
+		jsonResponse = response.json()
+		print jsonResponse[u'explanation']
+
+		if jsonResponse[u'explanation'][u'likelyFraud'] is True:
+			session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
+			return redirect(url_for('listAndPay'))
+		else:
+			return redirect(url_for('home'))
 	else:
-		return redirect(url_for('home'))
-	
+		session['message'] = "This transaction cannot be completed because some form fields are missing."
+		return redirect(url_for('listAndPay'))
+
 
 @app.route('/invoice', methods=['GET', 'POST'])
 def invoice_home():
