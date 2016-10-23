@@ -115,6 +115,20 @@ def payInvoice():
     amount = float(request.form["amount"])
     paymentId = request.form["id"]
 
+    with open('users.json') as data_file:    
+	    data = json.load(data_file)
+	    for user in data['users']:
+	        if user['username'] == session['username']:
+	        	if user['strikes'] > 3:
+	        		url = "https://sandbox.feedzai.com/v1/users/" + name + "/status"
+	        		data = { "status": "blocked" }
+        			headers = {'Authorization': 'UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', 'Accept-Encoding': 'UTF-8', 'Content-Type': 'application/json', 'Accept': '*/*'}
+
+        			response = requests.put(url, data=json.dumps(data), headers=headers, auth=HTTPBasicAuth('UIL7hxQQhziuyL+S9vQzr7WHibsBxXJkocGvs9DWoKzq/ZXExrqHXmr6vBBP:', ''))
+        			print response.json()
+        			session['message'] = "You have been blocked from making payments. Please contact us if you wish to change this."
+        			return redirect(url_for('listAndPay'))
+
     if(cardNumber and expiryMonth and expiryYear and cvv and amount and routingNumber and accountNumber):
 
         hash_object = hashlib.sha512(cardNumber)
@@ -130,6 +144,16 @@ def payInvoice():
 
         if jsonResponse[u'explanation'][u'likelyFraud'] is not False:
             session['message'] = "This transaction cannot be completed because we have identified this transaction as high risk for fraud."
+            
+            # Add a strike to their user account
+            with open('users.json') as data_file:    
+	            data = json.load(data_file)
+	            for user in data['users']:
+	                if user['username'] == session['username']:
+	                	user['strikes'] = user['strikes'] + 1
+			with open('invoices.json', 'w') as f:
+				json.dump(data, f)
+
             return redirect(url_for('listAndPay'))
         else:
           	session["vendor"]=vendor
