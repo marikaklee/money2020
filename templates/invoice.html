@@ -18,7 +18,7 @@
 	      <a class="navbar-brand" href="/" ></a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li><a href="/">Home</a></li>
+	      <li><a href="/">Dashboard</a></li>
         <li class="active"><a href="/invoice">Add an Invoice</a></li>
         <li><a href="/listInvoices">View and Pay Invoices</a></li>
 	      <li><a href="/logout">Logout</a></li>
@@ -35,12 +35,12 @@
   	<!--  form for invoice -->
   	<form action="/invoice" method="POST" style="width:50%">
 		  <div class="form-group">
-          	<label for="email">Service:</label>
+          	<label for="email">Description:</label>
           	<input class="form-control" id="memo" name="memo">
       	</div>
       	<div class="form-group">
           	<label for="email">Amount:</label>
-          	<span>$</span><input type="number" style="border-radius:5px; height:33px;" min="0.01" step="0.01" max="2500" value="0.00" name="amount">
+          	<span>$ </span><input type="number" style="border-radius:5px; height:33px;" min="0.01" step="0.01" max="2500" value="0.00" name="amount">
       	</div>
         <div class="form-group">
             <label for="email">Vendor Name/Company:</label>

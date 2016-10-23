@@ -9,7 +9,7 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <!-- Bootstrap 3.3.6 -->
       <script src="bootstrap/js/bootstrap.min.js"></script>
-      <center><img src="../static/digicheck.digicheck.png.gif" style="height:128px;"></center>
+      <center><img src="../static/digicheck.png.gif" style="height:128px;"></center>
 
    </head>
    <body>
@@ -20,7 +20,7 @@
                <a class="navbar-brand" href="/" ></a>
             </div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
+                <li class="active"><a href="/">Dashboard</a></li>
               	<li><a href="/invoice">Add an Invoice</a></li>
               	<li><a href="/listInvoices">View and Pay Invoices</a></li>
                	<li><a href="/logout">Logout</a></li>
@@ -32,8 +32,11 @@
       </nav>
 
       <center>
-      <h1>Digital Check Payment</h1>
-
+      {% if amount != "" %}
+      <h3>Identity authentication by credit card successful. 
+        <br>
+        You can now pay by using your bank account.</h3>
+      <br>
 	   <form id="checkbook_io" method="POST">
               <input type="hidden" id="checkbook_var"
                 data-key="afeb8798470e420d8c52568c9ff666a2"
@@ -43,13 +46,16 @@
                 data-description="Purchased 20 cats."
                 data-user-email = "marikalee15@gmail.com"
                 data-redirect-url ="https://mysterious-ridge-60236.herokuapp.com"
-                data-businessName ={{vendor}}
-                data-firstName ={{firstName}}
-                data-lastName ={{lastName}}
+                data-businessName ="Maudreka Inc."
+                data-firstName ="Marika"
+                data-lastName ="Lee"
                 data-env = 'sandbox'/>
       <script src="https://sandbox.checkbook.io/static/api/v1/checkbook.js" class="checkbook-button" id="checkbook_api_js"></script>
-        
+        <br>
+
+        <h3>You just saved ${{amount*0.029}} on ${{amount}} using this payment method.</h3>
     </form>
+    {%endif%}
   </center>
       </div>
     </body>

@@ -20,7 +20,7 @@
                <a class="navbar-brand" href="/" ></a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
+                <li><a href="/">Dashboard</a></li>
               	<li><a href="/invoice">Add an Invoice</a></li>
               	<li class="active"><a href="/listInvoices">View and Pay Invoices</a></li>
                	<li><a href="/logout">Logout</a></li>
@@ -80,16 +80,16 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">Pay Invoice</h4>
+                <h3 class="modal-title" style= "margin-left: 220px;">Pay Invoice</h3>
               </div>
-              <div class="modal-body">
+              <div class="modal-body" style= "margin-left: 220px;">
                 <h5 id="dueDate">Due Date: </h4>
                 <h5 id="vendor">Vendor: </h4>
                 <h5 id="amount">$ </h4>
-                <h5 id="service">Service: </h4>
-                <button type="submit" onclick="$('#payInvoice').modal('hide')" class="btn btn-primary" data-toggle="modal" data-target="#verifyCreditCard" >Pay Invoice</button> 
+                <h5 id="service">Service: </h4> 
               </div>
               <div class="modal-footer">
+                <button type="submit" onclick="$('#payInvoice').modal('hide')" class="btn btn-primary" data-toggle="modal" data-target="#verifyCreditCard" style="margin-right: 180px;">Pay Invoice</button> 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
@@ -102,14 +102,15 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">Pay Invoice</h4>
+                <h3 class="modal-title" style="margin-left: 220px;">Pay Invoice</h4>
               </div>
               <div class="modal-body" style="max-height: 500px;overflow-y: scroll;"">
                 <h4 id="paymentStatement"></h4>
-                <br>
                 <form class="form-horizontal" role="form" action="/payInvoice" method="POST">
                   <fieldset>
-                  <p> Please enter your bank's routing and account numbers. </p>
+                    <img src="../static/check.png" style="height: 48px; margin-left: 150px; margin-bottom: 5px;">
+
+
                     <div class="form-group">
                       <label class="col-sm-3 control-label" for="routing-number">Routing Number</label>
                       <div class="col-sm-9">
@@ -122,9 +123,7 @@
                         <input type="text" class="form-control" name="accountNumber" id="account-number" placeholder="Account Number">
                       </div>
                     </div>
-                    <br>
-                    <br>
-                    <p> Please enter your credit card information.</p>
+                    <img src="../static/creditcardlogos.png" style="height: 28px; margin-left: 150px; margin-bottom: 5px;">
                     <div class="form-group">
                       <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
                       <div class="col-sm-9">
@@ -213,7 +212,7 @@
         document.getElementById("amount").innerText = "Amount: $" + amount;
         document.getElementById("service").innerText = "Service: " + service;
         document.getElementById("vendorCompany").value = vendor;
-        document.getElementById("paymentStatement").innerText = "You're paying " + "$" + amount + " for " + service + " to " + vendor + " using a digital check.";
+        document.getElementById("paymentStatement").innerText = "Pay " + "$" + amount + " for " + service + " to " + vendor + " using a digital check.";
         document.getElementById("paymentAmount").value = amount;
         document.getElementById("paymentId").value = id;
       }

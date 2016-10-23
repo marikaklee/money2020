@@ -28,10 +28,10 @@ def check():
 	firstName=session.get("name")
 	lastName=""
 
-	session['amount']=None
-	session['vendor']=None
-	session['email']=None
-	session['name']=None
+	session['amount']=''
+	session['vendor']=''
+	session['email']=''
+	session['name']=''
 
 	with open('invoices.json') as data_file:    
 		data = json.load(data_file)
