@@ -182,7 +182,7 @@
                     <input id="paymentAmount" type="hidden" name="amount" value="">
                     <div class="form-group">
                       <div class="col-sm-offset-3 col-sm-9">
-                        <button type="submit" class="btn btn-success">Pay Now</button>
+                        <button type="submit" class="btn btn-success">Pay Now</button>                  
                       </div>
                     </div>
                   </fieldset>
@@ -197,6 +197,24 @@
 
       </div>
       </div>
+
+              <form id="checkbook_io" method="POST">
+              <input type="hidden" id="checkbook_var"
+                data-key="9b6982b196c64dc791bb1c64426f60e1"
+                data-amount='50'
+                data-name="Cats Inc."
+                data-for="Cats Inc."
+                data-description="Purchased 20 cats."
+                data-user-email ='marikalee15@gmail.com'
+                data-redirect-url ="https://example.com/callback"
+                data-businessName ='Maudreka Inc.'
+                data-firstName ='Audrey'
+                data-lastName ='Cole'
+                data-env = 'sandbox'/>
+              <script src="https://sandbox.checkbook.io/static/api/v1/checkbook.js" class="checkbook-button" id="checkbook_api_js">
+              </script>
+    </form>
+    
       <script type="text/javascript">
       function SetModalValues(dueDate, vendor, status, amount, service){
         document.getElementById("dueDate").innerText = "Due Date: " + dueDate;
