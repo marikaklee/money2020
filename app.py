@@ -12,24 +12,13 @@ import requests
 app = Flask(__name__)
 
 app.debug = True
-app.secret_key = 'THE_SECRET_KEY'
+app.secret_key = 'iF9SW2S6hFgCNpFXDpcoe17HaDWt5N'
 
 
-def authorization_header(endpoint, verb, content_type, timestamp, public_key, private_key):
-    """Generate Authroization header for Checkbook.io API requests
 
-    Args:
-        endpoint (str)- API endpoint (e.g. /v2/check)
-        timestamp (str)- timestamp in HTTP Date header
-        verb (str)- HTTP verb [GET, POST, PUT, DELETE]
-        content_type (str)- HTTP content type (typically application/json for POST and empty for GET)
-        public_key (str)- public API key
-        private_key (str)- private API key
-    """
-    message = verb + content_type + timestamp + endpoint
-    dig = hmac.new(private_key, msg=str(message), digestmod=hashlib.sha256).digest()
-    sig = base64.b64encode(dig).decode()
-    return '%s:%s' % (public_key, sig)
+@app.route("/check")
+def charge():
+    return render_template('check.html')
 
 @app.route("/", methods=['GET'])
 def home():
