@@ -40,7 +40,7 @@
       <br>
 	   <form id="checkbook_io" method="POST">
               <input type="hidden" id="checkbook_var"
-                data-key="afeb8798470e420d8c52568c9ff666a2"
+                data-key="13ec2509011a4f61bd67ff055c625671"
                 data-amount={{amount}}
                 data-name={{vendor}}
                 data-for={{vendor}}
@@ -51,8 +51,26 @@
                 data-firstName ="Marika"
                 data-lastName ="Lee"
                 data-env = 'sandbox'/>
-      <script src="https://sandbox.checkbook.io/static/api/v1/checkbook.js" class="checkbook-button" id="checkbook_api_js"></script>
-        <br>
+      <script src="https://stage.checkbook.io/static/api/v1/checkbook.js" class="checkbook-button" id="checkbook_api_js"></script>
+        
+     <!--  <form id="checkbook_io" method="POST">
+                      <input type="hidden" id="checkbook_var"
+                        data-key="c81eaf8ce87fd96f4df72e94bb1e6fc00b20c7189f3fad4bbf29371e4bc3051d652524d55233c07c89d0e1c82bd76dd14fbafd46f2f60cd8be040f73db3f9da85c42cb6f6bd98af9297f17be89a9b1ecd4a2a892a6bac53b30815ff443212ba04bbe9054ce1ee82222a315abbf04453a11985c29a19caa8ee1aaa0f60db2690241071a406ea1d7b8708a0fdd64e401c92542ab740c41973765aaf203a6b6cf5ae071ce1955ba55ad3baf754f3f3f12974b6a804deb97d6a59c74c7e4932c339bb63a3ce49baa4ac9390c4e44bbe06f47374f5bbd052397d5fe017c420aca043d3f759b3574a196a38806b6ad4c91c3338b9f2f0916165f5040bed1d8bc881007"
+                        data-amount=''
+                        data-name="Tricitykids"
+                        data-for="Tricitykids"
+                        data-description="Tricitykids Order"
+                        data-user-email =""
+                        data-redirect-url = "https://moneyz.herokuapp.com/check"
+                        data-firstName =""
+                        data-lastName =""
+                        data-interval ="WEEKLY"
+                        data-duration = "10"
+                        data-env="stage"/>
+                <script src="https://stage.checkbook.io/static/api/v1/checkbook.js" class="checkbook-button" id="checkbook_api_js"></script>
+            </form>
+ -->
+   <br>
 
         <h3>You just saved ${{amount*0.029}} on ${{amount}} using this payment method.</h3>
     </form>
